@@ -93,13 +93,13 @@ public class ScanManagement extends Base {
      * @param scanId
      * @return
      */
-    public static JSONObject getScanStatus(String restUrl, String authToken, String scanId){
+    public static String getScanStatus(String restUrl, String authToken, String scanId){
         String apiCall = restUrl + GETSCANSTATUS;
         Map<String,String> params = new HashMap<String, String>();
         params.put("scanId",scanId);
         Object response = get(apiCall, authToken, params);
         if(response.getClass().equals(JSONObject.class)){
-            return (JSONObject)response;
+            return ((JSONObject)response).getString("Status");
         }
         return null;
     }

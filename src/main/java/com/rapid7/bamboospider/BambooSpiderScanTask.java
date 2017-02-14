@@ -28,7 +28,7 @@ public class BambooSpiderScanTask implements TaskType {
 
         buildLogger.addBuildLogEntry("Value for restUrl: "+ restUrl);
         buildLogger.addBuildLogEntry("Value for login: "+ login);
-        buildLogger.addBuildLogEntry("Value for password: "+ password);
+        buildLogger.addBuildLogEntry("Value for password: hidden");
         buildLogger.addBuildLogEntry("Value for scan config: "+ scanConfig);
         buildLogger.addBuildLogEntry("Value for scan: "+ scan);
 
