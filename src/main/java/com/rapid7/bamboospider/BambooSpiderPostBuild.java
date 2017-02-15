@@ -1,6 +1,7 @@
 package com.rapid7.bamboospider;
 
 import com.atlassian.bamboo.build.CustomBuildProcessorServer;
+import com.atlassian.bamboo.builder.BuildState;
 import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.extras.common.log.Logger;
@@ -42,7 +43,7 @@ public class BambooSpiderPostBuild implements CustomBuildProcessorServer {
     public BuildContext call() throws InterruptedException, Exception {
         log.info("Running BambooSpiderPostBuild");
         Map<String,String> customConfig = this.buildContext.getBuildDefinition().getCustomConfiguration();
-        if (customConfig.equals(null)){
+        if (customConfig == null){
             log.error("Post command not set to run on the server. Skipping..");
             return buildContext;
         }
@@ -62,14 +63,15 @@ public class BambooSpiderPostBuild implements CustomBuildProcessorServer {
             log.info("Generating Auth Token");
             authToken = Authentication.authenticate(this.restUrl, this.login, this.password);
 
-            if (authToken.equals(null) || authToken.isEmpty()) {
+            if (authToken == null || authToken.isEmpty()) {
                 log.error("Invalid AppSpider authentication token: " + authToken);
+                buildContext.getBuildResult().setBuildState(BuildState.FAILED);
             } else {
                 log.info("Starting scan for " + this.scanConfig + " scan config");
                 JSONObject scanResult = ScanManagement.runScanByConfigName(this.restUrl, authToken, this.scanConfig);
                 log.info("Scan Request Result: " + scanResult);
 
-                if (scanResult.equals(null)){
+                if (scanResult == null){
                     log.error("Error while attempting to start scan, check ASE server logs");
                 }
 
@@ -114,7 +116,7 @@ public class BambooSpiderPostBuild implements CustomBuildProcessorServer {
     }
     private Boolean getScan(TaskDefinition taskDefinition){
         log.info("Checking if we are going to scan...");
-        if(taskDefinition.getConfiguration().get("scan").equals(null)) {
+        if(taskDefinition.getConfiguration().get("scan") == null) {
             log.info("Scanning is not enabled");
             return false;
         }else{

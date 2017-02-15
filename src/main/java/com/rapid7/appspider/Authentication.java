@@ -15,8 +15,8 @@ public class Authentication extends Base {
      */
     public static String authenticate(String restUrl, String username, String password){
         String apiCall = restUrl + API;
-        Object response = post(apiCall,username,password);
-        if (response.getClass().equals(String.class)){
+        Object response = post(apiCall, username, password);
+        if (response != null && response.getClass().equals(String.class)){
             String authToken = (String)response;
             return authToken;
         }
